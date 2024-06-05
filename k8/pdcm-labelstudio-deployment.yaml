@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdcm-labelstudio
+  namespace: pdcm-labelstudio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdcm-labelstudio
+  template:
+    metadata:
+      labels:
+        app: pdcm-labelstudio
+    spec:
+      containers:
+      - name: pdcm-labelstudio
+        image: heartexlabs/label-studio:latest
+        imagePullPolicy: Always
+        env:
+        volumeMounts:
+          - name: labelstudio-data-dir
+            mountPath: /label-studio/data
+            
+      volumes:
+        - name: labelstudio-data-dir
+          persistentVolumeClaim:
+            claimName: pdcm-labelstudio-pvc
